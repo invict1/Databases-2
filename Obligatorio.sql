@@ -1,0 +1,58 @@
+drop table PARTIDA;
+CREATE TABLE PARTIDA { /* una partida tiene un tablero */
+    ID NUMBER (5) NOT NULL,
+    TABLEROID NUMBER (5) REFERENCES TABLERO (ID),
+    FINALIZADA BOOLEAN NOT NULL
+}
+
+drop table TABLERO;
+CREATE TABLE TABLERO { 
+    ID NUMBER (5) NOT NULL,
+    MAX_Y NUMBER (3) NOT NULL,
+    MAX_X NUMBER (3) NOT NULL
+}
+
+CREATE TABLE TERRENO {
+    TIPO ,/* aire, tierra, etc */
+    COORDENADA_X NUMBER (3) NOT NULL,
+    COORDENADA_Y NUMBER (3) NOT NULL
+}
+
+CREATE TABLE CELDA { /* puede tener un terreno y existe la posibilidad de que exista un gusano en el */
+}
+
+CREATE TABLE CELDA_PARTIDA { /* representa una de las celdas en el tablero */
+}
+
+CREATE TABLE TURNO {    /* hay que definir */
+}
+
+CREATE TABLE JUGADOR {
+    ID NUMBER (5) PRIMARY KEY,
+    NOMBRE VARCHAR (10) NOT NULL
+}
+
+CREATE TABLE EQUIPO { /* Un equipo representa a un jugador */
+    ID NUMBER (5) PRIMARY KEY,
+    NOMBRE VARCHAR (10) NOT NULL,
+    JUGADORID NUMBER (5) REFERENCES JUGADOR (ID),
+    ASESINATOS NUMBER (2),
+    MUERTES NUMBER (2)
+}
+
+CREATE TABLE PARTICIPA { /* un equipo participa en una partida */
+    PARTIDAID NUMBER (5) REFERENCES PARTIDA (ID),
+    EQUIPOID NUMBER (5) REFERENCES EQUIPO (ID),
+    CONSTRAINT PK_Participan PRIMARY KEY (PARTIDAID, EQUIPOID)
+}
+
+CREATE TABLE GUSANO {
+    ID NUMBER (5) NOT NULL,
+    PARTIDAID NUMBER (5) NOT NULL,
+    EQUIPOID NUMBER (5) NOT NULL,
+    VIDA NUMBER (3),
+    CONSTRAINT PK_Gusano PRIMARY KEY (PARTIDAID, EQUIPOID)
+}
+
+CREATE TABLE ESTADISTICA { /* hay que definir */
+}
