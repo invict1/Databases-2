@@ -19,9 +19,11 @@ CREATE TABLE TERRENO {
 }
 
 CREATE TABLE CELDA { /* puede tener un terreno y existe la posibilidad de que exista un gusano en el */
+
 }
 
 CREATE TABLE CELDA_PARTIDA { /* representa una de las celdas en el tablero */
+
 }
 
 CREATE TABLE TURNO {    /* hay que definir */
