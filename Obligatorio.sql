@@ -86,7 +86,7 @@ CREATE TABLE ARMA_EQUIPO (
     CONSTRAINT FK_ARMA FOREIGN KEY (ARMAID) REFERENCES ARMA(ID)
 );
 ----------------------------------
---Restricciones
+-- Restricciones - Triggers
 
 -- UN EQUIPO TIENE 8 GUSANOS
 CREATE OR REPLACE TRIGGER MAXIMO_GUSANOS
@@ -97,7 +97,7 @@ DECLARE
 BEGIN
     SELECT COUNT(*) INTO CANTIDAD_GUSANO_EQUIPO
     FROM GUSANO G
-    WHERE g.equipoid = :NEW.IDEQUIPO;
+    WHERE G.EQUIPOID = :NEW.IDEQUIPO;
     
     IF(CANTIDAD_GUSANO_EQUIPO = 8)
     THEN RAISE_APPLICATION_ERROR(-4000, 'UN EQUIPO NO PUEDE TENER MAS DE 8 GUSANOS');
@@ -112,8 +112,8 @@ DECLARE
     CANTIDAD_ARMA_EQUIPO NUMBER;
 BEGIN
     SELECT COUNT(*) INTO CANTIDAD_ARMA_EQUIPO
-    FROM arma_equipo C
-    WHERE c.equipoid = :NEW.IDEQUIPO;
+    FROM ARMA_EQUIPO C
+    WHERE C.EQUIPOID = :NEW.IDEQUIPO;
     
     IF(CANTIDAD_ARMA_EQUIPO = 30)
     THEN RAISE_APPLICATION_ERROR(-4001, 'UN EQUIPO NO PUEDE TENER MAS DE 30 ARMAS');
@@ -128,8 +128,8 @@ DECLARE
     CANTIDAD_PARTIDA_EQUIPOS NUMBER;
 BEGIN
     SELECT COUNT (*) INTO CANTIDAD_PARTIDA_EQUIPOS
-    FROM Equipo e
-    WHERE e.partidaid = :NEW.partidaid;
+    FROM EQUIPO E
+    WHERE E.PARTIDAID = :NEW.PARTIDAID;
     
     IF(CANTIDAD_PARTIDA_EQUIPOS <> 4)
     THEN RAISE_APPLICATION_ERROR(-4002, 'UNA PARTIDA TIENE QUE TENER 4 EQUIPOS');
@@ -144,11 +144,56 @@ DECLARE
     CANTIDAD_HUMANOS_PARTIDA NUMBER;
 BEGIN
     SELECT COUNT (*) INTO CANTIDAD_HUMANOS_PARTIDA
-    FROM Equipo e
-    WHERE e.partidaid = :NEW.partidaid 
-		AND e.tipo_jugador = 'H';
+    FROM EQUIPO E
+    WHERE E.PARTIDAID = :NEW.PARTIDAID
+		AND E.TIPO_JUGADOR = 'H';
     
     IF(CANTIDAD_HUMANOS_PARTIDA = 0)
     THEN RAISE_APPLICATION_ERROR(-4003, 'UNA PARTIDA TIENE QUE TENER AL MENOS 1 JUGADOR HUMANO');
     END IF;
 END;
+/*Fin Triggers*/
+
+
+/*Procedures*/
+/*1
+Proveer un servicio que dada una partida muestre en pantalla los datos del terreno.*/
+
+
+/*2
+Proveer un servicio que dado un gusano y una posición en el contexto de una partida, ubique al gusano en la posición, si es posible. */
+
+
+/*3
+Proveer un servicio que dada una posición horizontal, en el contexto de una partida, “suelte” el arma del burro.*/
+
+
+/*4
+Proveer un servicio que retorne el resumen de la partida, que será invocado por la aplicación cuando finalice.*/
+CREATE OR REPLACE PROCEDURE ESTADISTICA_PARTIDA(PARTIDA INT) IS
+
+        CURSOR RESUMEN_PARTIDA(PARTIDA INT) IS
+            SELECT E.ID AS NOMBRE, E.ASESINATOS AS ASESINATOS, E.MUERTES AS MUERTES
+            FROM EQUIPO E
+            WHERE E.PARTIDAID = PARTIDA
+            ORDER BY E.ASESINATOS DESC;
+
+        RESUMENPARTIDA RESUMEN_PARTIDA%ROWTYPE;
+BEGIN
+
+    OPEN RESUMEN_PARTIDA(PARTIDA);
+    FETCH RESUMEN_PARTIDA INTO RESUMENPARTIDA;
+
+          WHILE RESUMEN_PARTIDA%FOUND LOOP
+            DBMS_OUTPUT.PUT_LINE('NUMERO JUGADOR = ' || RESUMENPARTIDA.NOMBRE ||
+                               ', ASESINATOS = ' || RESUMENPARTIDA.ASESINATOS ||
+							   ', MUERTES = ' || RESUMENPARTIDA.MUERTES);
+            FETCH RESUMEN_PARTIDA INTO RESUMENPARTIDA;
+          END LOOP;
+    CLOSE RESUMEN_PARTIDA;
+END ESTADISTICA_PARTIDA;
+
+/*5
+Proveer un servicio que reciba por parámetro una partida y la elimine de modo que no quede registro de sus datos relacionados, como si no hubiera existido.*/
+
+/*Fin Procedures*/
