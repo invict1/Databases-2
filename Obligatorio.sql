@@ -156,9 +156,6 @@ BEGIN
     END IF;
 END;
 
-
-
-
 ---UN GUSANO SOLO SE PUEDE INSERTAR DONDE HAY AIRE
 CREATE OR REPLACE TRIGGER AGREGAR_GUSANO
 BEFORE INSERT ON POSICION_PARTIDA
@@ -186,6 +183,23 @@ BEGIN
     THEN RAISE_APPLICATION_ERROR(-4001, 'UN EQUIPO NO PUEDE TENER MAS DE 30 ARMAS');
     END IF;
 END;
+
+-- A UN EQUIPO SOLO SE LE PUEDE ASIGNAR UNA PARTIDA SI POSEE ENTRE 1 y 30 ARMAS
+CREATE OR REPLACE TRIGGER ASIGNAR_EQUIPO_PARTIDA
+BEFORE UPDATE ON EQUIPO
+FOR EACH ROW
+DECLARE
+    CANTIDAD_ARMA_EQUIPO NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO CANTIDAD_ARMA_EQUIPO
+    FROM ARMA_EQUIPO A
+    WHERE A.EQUIPOID = :NEW.ID;
+    
+    IF(CANTIDAD_ARMA_EQUIPO = 0)
+    THEN RAISE_APPLICATION_ERROR(-4005, 'A UN EQUIPO SOLO SE LE PUEDE ASIGNAR UNA PARTIDA SI POSEE ENTRE 1 y 30 ARMAS');
+    END IF;
+END;
+
 /*Fin Triggers*/
 
 
@@ -233,7 +247,7 @@ BEGIN
         
 END MOSTRAR_TABLERO_PARTIDA;
 /*2
-Proveer un servicio que dado un gusano y una posición en el contexto de una partida, ubique al gusano en la posición, si es posible. */
+Proveer un servicio que dado un gusano y una posiciï¿½n en el contexto de una partida, ubique al gusano en la posiciï¿½n, si es posible. */
 
 create or replace NONEDITIONABLE PROCEDURE MOVER_GUSANO(
     p_partidaID in NUMERIC,
@@ -273,7 +287,7 @@ BEGIN
         
 END MOVER_GUSANO;
 /*3
-Proveer un servicio que dada una posición horizontal, en el contexto de una partida, “suelte” el arma del burro.*/
+Proveer un servicio que dada una posiciï¿½n horizontal, en el contexto de una partida, ï¿½suelteï¿½ el arma del burro.*/
 create or replace NONEDITIONABLE PROCEDURE TIRAR_BURRO(
     p_partidaID in NUMERIC,
     p_PosX in NUMERIC,
@@ -337,7 +351,7 @@ dbms_output.put_line('');
 END TIRAR_BURRO;
 
 /*4
-Proveer un servicio que retorne el resumen de la partida, que será invocado por la aplicación cuando finalice.*/
+Proveer un servicio que retorne el resumen de la partida, que serï¿½ invocado por la aplicaciï¿½n cuando finalice.*/
 CREATE OR REPLACE PROCEDURE ESTADISTICA_PARTIDA(PARTIDA INT) IS
 
         CURSOR RESUMEN_PARTIDA(PARTIDA INT) IS
@@ -362,7 +376,7 @@ BEGIN
 END ESTADISTICA_PARTIDA;
 
 /*5
-Proveer un servicio que reciba por parámetro una partida y la elimine de modo que no quede registro de sus datos relacionados, como si no hubiera existido.*/
+Proveer un servicio que reciba por parï¿½metro una partida y la elimine de modo que no quede registro de sus datos relacionados, como si no hubiera existido.*/
 CREATE OR REPLACE PROCEDURE BORRAR_PARTIDA(PARTIDA INT) IS
 
   CURSOR OBTENER_EQUIPO(PARTIDA INT) IS
