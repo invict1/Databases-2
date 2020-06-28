@@ -161,7 +161,33 @@ END;
 /*Procedures*/
 /*1
 Proveer un servicio que dada una partida muestre en pantalla los datos del terreno.*/
+create or replace NONEDITIONABLE PROCEDURE MOSTRAR_TABLERO_PARTIDA(
+    p_partidaID in NUMERIC)
+AS
+indiceX NUMBER(5);
+indiceY NUMBER(5);
+auxTerreno varchar(1);
+auxGusano  varchar (5);
+CURx SYS_REFCURSOR;
+CURy SYS_REFCURSOR;
 
+BEGIN
+
+      OPEN CURx FOR 
+       SELECT DISTINCT (COORDENADA_X)  FROM posicion_partida WHERE ID=p_partidaid;
+       LOOP 
+        FETCH CURx INTO indiceX; 
+        dbms_output.put_line('');
+             OPEN CURY FOR SELECT COORDENADA_Y FROM posicion_partida WHERE COORDENADA_X=indiceX and ID=p_partidaID;
+             LOOP
+                FETCH CURy INTO indiceY; 
+                   select p.terrenoid into auxTerreno  FROM posicion_partida p WHERE COORDENADA_X=indiceX and ID=p_partidaID AND COORDENADA_Y=indiceY;
+                  DBMS_OUTPUT.PUT(auxTerreno);
+                  EXIT WHEN CURy %NOTFOUND;  
+             END LOOP;
+        EXIT WHEN CURx %NOTFOUND;   
+        END LOOP;
+END MOSTRAR_TABLERO_PARTIDA;
 
 /*2
 Proveer un servicio que dado un gusano y una posición en el contexto de una partida, ubique al gusano en la posición, si es posible. */
