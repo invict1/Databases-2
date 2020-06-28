@@ -182,11 +182,20 @@ BEGIN
              OPEN CURY FOR SELECT COORDENADA_Y FROM posicion_partida WHERE COORDENADA_X=indiceX and ID=p_partidaID;
 
              LOOP
-                FETCH CURy INTO indiceY;
+              FETCH CURy INTO indiceY;
                  EXIT WHEN CURy %NOTFOUND; 
-                   select p.terrenoid into auxTerreno  FROM posicion_partida p WHERE COORDENADA_X=indiceX and ID=p_partidaID AND COORDENADA_Y=indiceY;
-                  DBMS_OUTPUT.PUT(auxTerreno);
-                  
+                   select p.terrenoid,e.letra_gusano into auxTerreno,auxGusano 
+                   FROM posicion_partida p 
+                   LEFT join GUSANO g on g.id = p.gusanoid
+                   LEFT join equipo e on e.id = g.equipoid
+                   WHERE COORDENADA_X=indiceX and p.id=p_partidaID AND COORDENADA_Y=indiceY;
+                   IF(auxGusano IS NOT NULL)
+                   THEN
+                    DBMS_OUTPUT.PUT(auxGusano);
+                   ELSE
+                   DBMS_OUTPUT.PUT(auxTerreno);
+                  END IF;
+             
              END LOOP;
         EXIT WHEN CURx %NOTFOUND;   
         END LOOP;
