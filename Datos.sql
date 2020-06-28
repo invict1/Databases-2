@@ -4,13 +4,7 @@ insert into terreno values ('A','AGUA');
 insert into terreno values ('.','Aire');
 insert into terreno values ('P','Piedra');
 insert into terreno values ('B','Caja Bomba');
-
 SELECT * FROM TERRENO;
-
---DATOS TABLERO 15X50
---ejecutar SP POPULAR_TABLERO
-SELECT count(*) FROM TABLERO;
-
 
 --------------insert partida
 insert into partida  values (1,30,'DIFICIL','0','0');
@@ -65,22 +59,39 @@ INSERT INTO GUSANO VALUES (32,4,100);
 
 SELECT * FROM GUSANO;
 TRUNCATE TABLE GUSANO;
-----------POS PARTIDA PARTIDA
-INSERT INTO  POSICION_PARTIDA VALUES (1,1,1,1,1,2,NULL,'.');
-INSERT INTO  POSICION_PARTIDA VALUES (1,1,2,1,1,2,NULL,'.');
-INSERT INTO  POSICION_PARTIDA VALUES (1,1,3,1,1,4,NULL,'.');
-INSERT INTO  POSICION_PARTIDA VALUES (1,1,4,1,1,2,NULL,'.');
-INSERT INTO  POSICION_PARTIDA VALUES (1,2,1,1,1,1,1,'T');
-INSERT INTO  POSICION_PARTIDA VALUES (1,2,2,1,1,4,NULL,'T');
-INSERT INTO  POSICION_PARTIDA VALUES (1,2,3,1,1,2,3,'T');
-INSERT INTO  POSICION_PARTIDA VALUES (1,2,4,1,1,2,NULL,'T');
-INSERT INTO  POSICION_PARTIDA VALUES (1,3,1,1,1,4,NULL,'A');
-INSERT INTO  POSICION_PARTIDA VALUES (1,3,2,1,1,2,NULL,'A');
-INSERT INTO  POSICION_PARTIDA VALUES (1,3,3,1,1,2,NULL,'A');
-INSERT INTO  POSICION_PARTIDA VALUES (1,3,4,1,1,4,NULL,'A');
 
+--DATOS TABLERO 15X50
+--ejecutar SP POPULAR_TABLERO
+SELECT count(*) FROM TABLERO;
+
+
+
+
+----------POS PARTIDA PARTIDA
+--INSERT INTO  POSICION_PARTIDA VALUES (1,1,1,1,1,2,NULL,'.');
+--INSERT INTO  POSICION_PARTIDA VALUES (1,1,2,1,1,2,NULL,'.');
+--INSERT INTO  POSICION_PARTIDA VALUES (1,1,3,1,1,4,NULL,'.');
+--INSERT INTO  POSICION_PARTIDA VALUES (1,1,4,1,1,2,NULL,'.');
+--INSERT INTO  POSICION_PARTIDA VALUES (1,2,1,1,1,1,1,'T');
+--INSERT INTO  POSICION_PARTIDA VALUES (1,2,2,1,1,4,NULL,'T');
+--INSERT INTO  POSICION_PARTIDA VALUES (1,2,3,1,1,2,3,'T');
+--INSERT INTO  POSICION_PARTIDA VALUES (1,2,4,1,1,2,NULL,'T');
+
+
+SELECT * FROM POSICION_PARTIDA;
 
 TRUNCATE TABLE  POSICION_PARTIDA;
+
+
+
+
+
+
+
+
+
+
+
 -------SP  PARA CARGAR DATOS
 
 --1 POPULAR TABLERO
@@ -104,5 +115,41 @@ BEGIN
         END LOOP;
 
 END POPULAR_TABLERO;
+
+---------------------------------
+-- SP2 POPULAR LAS TODAS LAS CELDAS DE LA PARTIDA
+create or replace NONEDITIONABLE PROCEDURE POPULAR_PARTIDA(
+    p_partidaID in NUMERIC)
+AS
+indiceX NUMBER(3):=1;
+indiceY NUMBER(3):=1;
+
+BEGIN
+    
+     WHILE indiceX <51
+        LOOP
+           WHILE indiceY <16
+            LOOP
+               -- INSERT  INTO TABLERO  values (p_partidaID,indiceX,indiceY);
+                 IF(indiceX <30)
+                   THEN
+                     INSERT INTO  POSICION_PARTIDA VALUES (p_partidaID,indiceX,indiceY,1,1,NULL,NULL,'.');
+                  END IF;
+                IF(indiceX >=30 AND indiceX <=45)
+                   THEN
+                     INSERT INTO  POSICION_PARTIDA VALUES (p_partidaID,indiceX,indiceY,1,1,NULL,NULL,'T');
+                  END IF;
+                  IF(indiceX >45)
+                   THEN
+                     INSERT INTO  POSICION_PARTIDA VALUES (p_partidaID,indiceX,indiceY,1,1,NULL,NULL,'A');
+                  END IF;
+               
+                indiceY:=indiceY + 1;
+            END LOOP; 
+            indiceY:=1;
+            indiceX:=indiceX + 1;    
+        END LOOP;
+
+END POPULAR_PARTIDA;
 
 
