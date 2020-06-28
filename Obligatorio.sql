@@ -201,6 +201,7 @@ BEGIN
 END MOSTRAR_TABLERO_PARTIDA;
 /*2
 Proveer un servicio que dado un gusano y una posición en el contexto de una partida, ubique al gusano en la posición, si es posible. */
+
 create or replace NONEDITIONABLE PROCEDURE MOVER_GUSANO(
     p_partidaID in NUMERIC,
     p_gusID in NUMERIC,
@@ -227,21 +228,80 @@ BEGIN
          IF(auxTerreno = '.' AND  auxGusano IS NULL)   
          THEN
               update posicion_partida p set gusanoid=p_gusID , p.equipoid=auxeQUIPO 
-                  where p.coordenada_x=p_cordX and p.coordenada_y=p_cordy ;
+                  where   p.id=p_partidaID and p.coordenada_x=p_cordX and p.coordenada_y=p_cordy ;
             
                  ---LUEGO DE MOVER
         
                 update posicion_partida p set gusanoid=null , p.equipoid=null 
-                 where p.coordenada_x=indicex and p.coordenada_y=indicey ;
+                 where   p.id=p_partidaID and p.coordenada_x=indicex and p.coordenada_y=indicey ;
          END IF;
     
     mostrar_tablero_partida(p_partidaID);
         
 END MOVER_GUSANO;
-
 /*3
 Proveer un servicio que dada una posición horizontal, en el contexto de una partida, “suelte” el arma del burro.*/
+create or replace NONEDITIONABLE PROCEDURE TIRAR_BURRO(
+    p_partidaID in NUMERIC,
+    p_PosX in NUMERIC,
+    p_PosY in NUMERIC)
+AS
+indiceX NUMBER(3):=1;
+indiceY NUMBER(3):=1;
+auxGusanoId NUMBER(3);
+auxTerreno varchar(1);
+auxGusano  varchar (5);
+desde NUMBER (3);
+hasta NUMBER (3);
 
+CURx SYS_REFCURSOR;
+CURy SYS_REFCURSOR;
+
+
+BEGIN
+dbms_output.put_line('TABLERO ANTES DEL BURRO:');
+dbms_output.put_line('////////////////////////');
+      MOSTRAR_TABLERO_PARTIDA(p_partidaID);
+      
+      desde:=p_posx-2;
+      hasta:=p_posx+2;
+      
+      OPEN CURy FOR 
+       SELECT DISTINCT (COORDENADA_Y)  FROM posicion_partida WHERE ID=p_partidaid order by coordenada_y asc;
+       LOOP 
+        FETCH CURy INTO indiceY; 
+             OPEN CURx FOR SELECT COORDENADA_X FROM posicion_partida WHERE COORDENADA_Y=indiceY and ID=p_partidaID order by coordenada_x asc,coordenada_y asc;
+             LOOP
+              FETCH CURx INTO indiceX;
+                 EXIT WHEN CURx %NOTFOUND; 
+                  
+                   select p.terrenoid,e.letra_gusano,p.gusanoid into auxTerreno,auxGusano,auxGusanoId 
+                   FROM posicion_partida p 
+                   LEFT join GUSANO g on g.id = p.gusanoid
+                   LEFT join equipo e on e.id = g.equipoid
+                   WHERE COORDENADA_X=indiceX and p.id=p_partidaID AND COORDENADA_Y=indiceY;
+                  
+                   IF( indiceX >= desde AND indiceX<=hasta and auxTerreno <> 'A' )
+                   THEN             
+                    
+                    update posicion_partida p set gusanoid=null , p.equipoid=null, p.terrenoid='.'
+                    where  p.id=p_partidaID and p.coordenada_x=indiceX and p.coordenada_y=indiceY;
+                    
+                    update gusano g set vida=0 where g.id= auxGusanoId; 
+                  
+                   END IF;
+                   
+             END LOOP;
+        EXIT WHEN CURy %NOTFOUND;   
+        END LOOP;
+      
+      
+ dbms_output.put_line('');       
+dbms_output.put_line('//////////////////////////');
+dbms_output.put_line('TABLERO DESPUES DEL BURRO:');
+dbms_output.put_line('');
+      MOSTRAR_TABLERO_PARTIDA(p_partidaID);
+END TIRAR_BURRO;
 
 /*4
 Proveer un servicio que retorne el resumen de la partida, que será invocado por la aplicación cuando finalice.*/
