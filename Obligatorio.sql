@@ -1,11 +1,12 @@
-drop table TERRENO;
-drop table POSICION_PARTIDA;
-drop table EQUIPO;
-drop table GUSANO;
-drop table ARMA;
 drop table ARMA_EQUIPO;
-drop table TABLERO;
+drop table ARMA;
+drop table POSICION_PARTIDA;
+drop table GUSANO;
+drop table EQUIPO;
 drop table PARTIDA;
+drop table TABLERO;
+drop table TERRENO;
+
 
 CREATE TABLE TABLERO (
     ID NUMBER (5) NOT NULL ,
@@ -200,7 +201,43 @@ BEGIN
 END MOSTRAR_TABLERO_PARTIDA;
 /*2
 Proveer un servicio que dado un gusano y una posición en el contexto de una partida, ubique al gusano en la posición, si es posible. */
+create or replace NONEDITIONABLE PROCEDURE MOVER_GUSANO(
+    p_partidaID in NUMERIC,
+    p_gusID in NUMERIC,
+    p_cordX in NUMERIC,
+    p_cordy in NUMERIC   
+    )
+AS
+indiceX NUMBER(3):=1;
+indiceY NUMBER(3):=1;
 
+auxTerreno varchar(1);
+auxGusano  varchar (5);
+auxeQUIPO  NUMERIC (5);
+
+
+
+BEGIN
+    --obtener pos origen
+    select coordenada_x,coordenada_y,equipoid into indiceX,indicey,auxeQUIPO from posicion_partida where gusanoid =p_gusid;
+    
+    --MOVER
+    select p.terrenoid,p.gusanoid into auxTerreno,auxGusano from posicion_partida p where p.coordenada_x=p_cordx and p.coordenada_y=p_cordy ;
+          
+         IF(auxTerreno = '.' AND  auxGusano IS NULL)   
+         THEN
+              update posicion_partida p set gusanoid=p_gusID , p.equipoid=auxeQUIPO 
+                  where p.coordenada_x=p_cordX and p.coordenada_y=p_cordy ;
+            
+                 ---LUEGO DE MOVER
+        
+                update posicion_partida p set gusanoid=null , p.equipoid=null 
+                 where p.coordenada_x=indicex and p.coordenada_y=indicey ;
+         END IF;
+    
+    mostrar_tablero_partida(p_partidaID);
+        
+END MOVER_GUSANO;
 
 /*3
 Proveer un servicio que dada una posición horizontal, en el contexto de una partida, “suelte” el arma del burro.*/
@@ -262,31 +299,3 @@ BEGIN
             ROLLBACK TO PUNTO_PARTIDA;
     COMMIT;
 END BORRAR_PARTIDA;
-
-/*Fin Procedures*/
-
-
---/*LLAMADA A FUNCIONES*/
-----1
---BEGIN
-    
---END;
-
-----2
-
---BEGIN
-    
---END;
-
-----3
---BEGIN
-    
---END;
-----4
---BEGIN
---    ESTADISTICA_PARTIDA(1);
---END;
-----5
---BEGIN
---    BORRAR_PARTIDA(1);
---END;
