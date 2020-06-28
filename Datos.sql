@@ -62,6 +62,7 @@ TRUNCATE TABLE GUSANO;
 
 --DATOS TABLERO 15X50
 --ejecutar SP POPULAR_TABLERO
+EXEC POPULAR_TABLERO(1);
 SELECT count(*) FROM TABLERO;
 
 
@@ -77,7 +78,7 @@ SELECT count(*) FROM TABLERO;
 --INSERT INTO  POSICION_PARTIDA VALUES (1,2,3,1,1,2,3,'T');
 --INSERT INTO  POSICION_PARTIDA VALUES (1,2,4,1,1,2,NULL,'T');
 
-
+EXEC POPULAR_PARTIDA(1);
 SELECT * FROM POSICION_PARTIDA;
 
 TRUNCATE TABLE  POSICION_PARTIDA;
@@ -131,15 +132,15 @@ BEGIN
            WHILE indiceY <16
             LOOP
                -- INSERT  INTO TABLERO  values (p_partidaID,indiceX,indiceY);
-                 IF(indiceX <30)
+                 IF(indiceY <6)
                    THEN
                      INSERT INTO  POSICION_PARTIDA VALUES (p_partidaID,indiceX,indiceY,1,1,NULL,NULL,'.');
                   END IF;
-                IF(indiceX >=30 AND indiceX <=45)
+                IF(indiceY >=6 AND indiceY <=12)
                    THEN
                      INSERT INTO  POSICION_PARTIDA VALUES (p_partidaID,indiceX,indiceY,1,1,NULL,NULL,'T');
                   END IF;
-                  IF(indiceX >45)
+                  IF(indiceY >12)
                    THEN
                      INSERT INTO  POSICION_PARTIDA VALUES (p_partidaID,indiceX,indiceY,1,1,NULL,NULL,'A');
                   END IF;
@@ -151,5 +152,3 @@ BEGIN
         END LOOP;
 
 END POPULAR_PARTIDA;
-
-

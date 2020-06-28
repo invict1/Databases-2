@@ -159,8 +159,7 @@ END;
 
 /*Procedures*/
 /*1
-Proveer un servicio que dada una partida muestre en pantalla los datos del terreno.*/
-create or replace NONEDITIONABLE PROCEDURE MOSTRAR_TABLERO_PARTIDA(
+Proveer un servicio que dada una partida muestre en pantalla los datos del terreno.*/create or replace procedure  MOSTRAR_TABLERO_PARTIDA(
     p_partidaID in NUMERIC)
 AS
 indiceX NUMBER(3):=1;
@@ -173,16 +172,15 @@ CURy SYS_REFCURSOR;
 
 BEGIN
 
-      OPEN CURx FOR 
-       SELECT DISTINCT (COORDENADA_X)  FROM posicion_partida WHERE ID=p_partidaid;
+      OPEN CURy FOR 
+       SELECT DISTINCT (COORDENADA_Y)  FROM posicion_partida WHERE ID=p_partidaid order by coordenada_y asc;
        LOOP 
-        FETCH CURx INTO indiceX; 
+        FETCH CURy INTO indiceY; 
         dbms_output.put_line('');
-             OPEN CURY FOR SELECT COORDENADA_Y FROM posicion_partida WHERE COORDENADA_X=indiceX and ID=p_partidaID;
-
+             OPEN CURx FOR SELECT COORDENADA_X FROM posicion_partida WHERE COORDENADA_Y=indiceY and ID=p_partidaID order by coordenada_x asc,coordenada_y asc;
              LOOP
-              FETCH CURy INTO indiceY;
-                 EXIT WHEN CURy %NOTFOUND; 
+              FETCH CURx INTO indiceX;
+                 EXIT WHEN CURx %NOTFOUND; 
                    select p.terrenoid,e.letra_gusano into auxTerreno,auxGusano 
                    FROM posicion_partida p 
                    LEFT join GUSANO g on g.id = p.gusanoid
@@ -196,7 +194,7 @@ BEGIN
                   END IF;
              
              END LOOP;
-        EXIT WHEN CURx %NOTFOUND;   
+        EXIT WHEN CURy %NOTFOUND;   
         END LOOP;
         
 END MOSTRAR_TABLERO_PARTIDA;
