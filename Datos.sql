@@ -16,11 +16,21 @@ insert into terreno values ('P','Piedra');
 insert into terreno values ('B','Caja Bomba');
 --------------insert partida
 insert into partida  values (1,30,'DIFICIL','0','0');
+
+--------------insert arma
+insert into arma  values (1,100,'PISTOLA');
+insert into arma  values (2,100,'TNT');
+insert into arma  values (3,100,'BURRO');
+
 -------EQUIPO
 INSERT INTO EQUIPO VALUES (1,'EQUIPO A',1,'H','W',0,0);
 INSERT INTO EQUIPO VALUES (2,'EQUIPO B',1,'H','R',0,0);
 INSERT INTO EQUIPO VALUES (3,'EQUIPO C',1,'M','L',0,0);
 INSERT INTO EQUIPO VALUES (4,'EQUIPO D',1,'H','H',0,0);
+--ARMAS_EQUIPO
+insert into arma_equipo  values (1,1,1);
+insert into arma_equipo  values (2,2,1);
+
 -------GUSANO
 INSERT INTO GUSANO VALUES (1,1,100);
 INSERT INTO GUSANO VALUES (2,1,100);
