@@ -21,15 +21,78 @@ insert into partida  values (1,30,'DIFICIL','0','0');
 insert into arma  values (1,100,'PISTOLA');
 insert into arma  values (2,100,'TNT');
 insert into arma  values (3,100,'BURRO');
+insert into arma  values (4,100,'PISTOLA');
+insert into arma  values (5,100,'A');
+insert into arma  values (6,100,'B');
+insert into arma  values (7,100,'C');
+insert into arma  values (8,100,'D');
+insert into arma  values (9,100,'E');
+insert into arma  values (10,100,'F');
+insert into arma  values (11,100,'G');
+insert into arma  values (12,100,'H');
+insert into arma  values (13,100,'I');
+insert into arma  values (14,100,'J');
+insert into arma  values (15,100,'K');
+insert into arma  values (16,100,'L');
+insert into arma  values (17,100,'M');
+insert into arma  values (18,100,'N');
+insert into arma  values (19,100,'O');
+insert into arma  values (20,100,'P');
+insert into arma  values (21,100,'Q');
+insert into arma  values (22,100,'R');
+insert into arma  values (23,100,'S');
+insert into arma  values (24,100,'T');
+insert into arma  values (24,100,'U');
+insert into arma  values (26,100,'V');
+insert into arma  values (27,100,'W');
+insert into arma  values (28,100,'X');
+insert into arma  values (29,100,'Y');
+insert into arma  values (30,100,'Z');
+insert into arma  values (31,100,'ARCO');
 
 -------EQUIPO
 INSERT INTO EQUIPO VALUES (1,'EQUIPO A',1,'H','W',0,0);
 INSERT INTO EQUIPO VALUES (2,'EQUIPO B',1,'H','R',0,0);
 INSERT INTO EQUIPO VALUES (3,'EQUIPO C',1,'M','L',0,0);
 INSERT INTO EQUIPO VALUES (4,'EQUIPO D',1,'H','H',0,0);
+
 --ARMAS_EQUIPO
 insert into arma_equipo  values (1,1,1);
 insert into arma_equipo  values (2,2,1);
+insert into arma_equipo  values (3,3,1);
+insert into arma_equipo  values (4,4,1);
+insert into arma_equipo  values (5,5,1);
+insert into arma_equipo  values (6,6,1);
+insert into arma_equipo  values (7,7,1);
+insert into arma_equipo  values (8,8,1);
+insert into arma_equipo  values (9,9,1);
+insert into arma_equipo  values (10,10,1);
+insert into arma_equipo  values (11,11,1);
+insert into arma_equipo  values (12,12,1);
+insert into arma_equipo  values (13,13,1);
+insert into arma_equipo  values (14,14,1);
+insert into arma_equipo  values (15,15,1);
+insert into arma_equipo  values (16,16,1);
+insert into arma_equipo  values (17,17,1);
+insert into arma_equipo  values (18,18,1);
+insert into arma_equipo  values (19,19,1);
+insert into arma_equipo  values (20,20,1);
+insert into arma_equipo  values (21,21,1);
+insert into arma_equipo  values (22,22,1);
+insert into arma_equipo  values (23,23,1);
+insert into arma_equipo  values (24,24,1);
+insert into arma_equipo  values (25,25,1);
+insert into arma_equipo  values (26,26,1);
+insert into arma_equipo  values (27,27,1);
+insert into arma_equipo  values (28,28,1);
+insert into arma_equipo  values (29,29,1);
+insert into arma_equipo  values (30,30,1);
+insert into arma_equipo  values (31,2,1);
+--insert into arma_equipo  values (25,25,1); PARA HACER SALTAR TRIGER MAXIMO_ARMA
+
+    SELECT COUNT(*)
+    FROM ARMA_EQUIPO C
+    WHERE C.EQUIPOID = 1;
 
 -------GUSANO
 INSERT INTO GUSANO VALUES (1,1,100);
@@ -40,6 +103,7 @@ INSERT INTO GUSANO VALUES (5,1,100);
 INSERT INTO GUSANO VALUES (6,1,100);
 INSERT INTO GUSANO VALUES (7,1,100);
 INSERT INTO GUSANO VALUES (8,1,100);
+--INSERT INTO GUSANO VALUES (77,1,100); PARA HACER SALTAR EL TRIGER MAXIMO_GUSANOS
 
 INSERT INTO GUSANO VALUES (9,2,100);
 INSERT INTO GUSANO VALUES (10,2,100);
