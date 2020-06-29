@@ -77,13 +77,13 @@ EXEC POPULAR_PARTIDA(1);
 ----INSERTAR GUSANOS EN UNA PARTIDA
 
 
-UPDATE  POSICION_PARTIDA SET EQUIPOID = '1', GUSANOID = '1'  WHERE coordenada_x=1 AND coordenada_y=5;
-UPDATE  POSICION_PARTIDA SET EQUIPOID = '1', GUSANOID = '3'  WHERE coordenada_x= 1 AND coordenada_y=8;
-UPDATE  POSICION_PARTIDA SET EQUIPOID = '2', GUSANOID = '9'  WHERE coordenada_x= 2 AND coordenada_y=8;
-UPDATE  POSICION_PARTIDA SET EQUIPOID = '4', GUSANOID = '30' WHERE coordenada_x= 2 AND coordenada_y=12;
+UPDATE  POSICION_PARTIDA SET EQUIPOID = '1', GUSANOID = '1'  WHERE coordenada_x=4 AND coordenada_y=5;
+UPDATE  POSICION_PARTIDA SET EQUIPOID = '1', GUSANOID = '3'  WHERE coordenada_x= 22 AND coordenada_y=5;
+UPDATE  POSICION_PARTIDA SET EQUIPOID = '2', GUSANOID = '9'  WHERE coordenada_x= 34 AND coordenada_y=5;
+UPDATE  POSICION_PARTIDA SET EQUIPOID = '4', GUSANOID = '30' WHERE coordenada_x= 45 AND coordenada_y=5;
 
-
-
+UPDATE  POSICION_PARTIDA SET EQUIPOID = '1', GUSANOID = '6'  WHERE coordenada_x= 5 AND coordenada_y=9;
+UPDATE  POSICION_PARTIDA SET EQUIPOID = '4', GUSANOID = '28' WHERE coordenada_x= 35 AND coordenada_y=9;
 -------SP  PARA CARGAR DATOS
 
 --1 POPULAR TABLERO
@@ -127,10 +127,29 @@ BEGIN
                    THEN
                      INSERT INTO  POSICION_PARTIDA VALUES (p_partidaID,indiceX,indiceY,1,1,NULL,NULL,'.');
                   END IF;
-                IF(indiceY >=6 AND indiceY <=12)
+                IF(indiceY >=6 AND indiceY <8)
                    THEN
                      INSERT INTO  POSICION_PARTIDA VALUES (p_partidaID,indiceX,indiceY,1,1,NULL,NULL,'T');
                   END IF;
+                IF(indiceY >=8 AND indiceY <10)
+                   THEN
+                     INSERT INTO  POSICION_PARTIDA VALUES (p_partidaID,indiceX,indiceY,1,1,NULL,NULL,'.');
+                  END IF;
+                 IF(indiceY >=10 AND indiceY <12)
+                   THEN
+                    IF (indiceX<=15)
+                    THEN
+                     INSERT INTO  POSICION_PARTIDA VALUES (p_partidaID,indiceX,indiceY,1,1,NULL,NULL,'T');
+                    END IF;
+                    IF (indiceX >=30)
+                    THEN
+                     INSERT INTO  POSICION_PARTIDA VALUES (p_partidaID,indiceX,indiceY,1,1,NULL,NULL,'T');
+                    END IF;
+                     IF ( indiceX >15 and indicex <30)
+                    THEN
+                     INSERT INTO  POSICION_PARTIDA VALUES (p_partidaID,indiceX,indiceY,1,1,NULL,NULL,'.');
+                    END IF;
+                  END IF;   
                   IF(indiceY >12)
                    THEN
                      INSERT INTO  POSICION_PARTIDA VALUES (p_partidaID,indiceX,indiceY,1,1,NULL,NULL,'A');

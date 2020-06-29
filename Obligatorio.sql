@@ -378,8 +378,7 @@ BEGIN
         dbms_output.put_line('NOMBRE JUGADOR = ' || nombre ||
                                ', ASESINATOS = ' || matados ||
 							   ', MUERTES = ' || muertes);
- 
-                
+              
     END LOOP;
 END ESTADISTICA_PARTIDA;
 
@@ -395,6 +394,10 @@ OBTENER_EQUIPO SYS_REFCURSOR;
 
 BEGIN
 
+dbms_output.put_line('PARTIDA A BORRAR:');
+dbms_output.put_line('////////////////////////');
+      MOSTRAR_TABLERO_PARTIDA(p_partida);
+
  delete from posicion_partida p where p.partidaid =p_partida;
  OPEN OBTENER_EQUIPO FOR 
     select e.id FROM equipo e where e.partidaid=p_partida;
@@ -409,7 +412,7 @@ BEGIN
     
     delete from equipo e where e.partidaid =p_partida;
     delete from partida f where f.id=p_partida; 
-   
-      DBMS_OUTPUT.PUT('PARTIDA BORRADA CORRECTAMENTE');
+      dbms_output.put_line('/////////////////////////////');
+      dbms_output.put_line('PARTIDA BORRADA CORRECTAMENTE');
     
 END ;
